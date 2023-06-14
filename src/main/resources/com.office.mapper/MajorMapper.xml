@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.office.mapper.MajorMapper">
+    <resultMap id="MajorMap" type="Major">
+        <id column="id" property="id"/>
+        <result column="major_name" property="major_name"/>
+        <result column="major_time" property="major_time"/>
+        <result column="major_date" property="major_date"/>
+        <result column="major_type" property="major_type"/>
+        <result column="major_delete" property="major_delete"/>
+        <association property="majortype" javaType="Majortype">
+            <id column="tid" property="id"/>
+            <result column="majortype" property="majortype"/>
+        </association>
+    </resultMap>
+    <insert id="addMajor">
+        insert  into  t_major  values(null,#{major_name},#{major_time},#{major_date},#{major_type},0)
+    </insert>
+    <update id="deleteById">
+        update t_major set major_delete=1 where id=#{id}
+    </update>
+    <update id="updateMajor">
+        update t_major set major_name=#{major_name},
+                           major_time=#{major_time},
+                           major_date=#{major_date},
+                           major_type=#{major_type}
+                            where id=#{id}
+    </update>
+    <select id="findMajorsByPage" resultMap="MajorMap">
+        SELECT
+        t_major.*,t_majortype.id 'tid',
+        t_majortype.majortype
+        FROM
+            t_major
+        INNER JOIN t_majortype ON t_major.major_type=t_majortype.id
+        WHERE
+            major_delete=0
+        ORDER BY
+            t_major.id DESC
+        limit #{pageStart},#{pageSize}
+    </select>
+    <select id="findTotalcount" resultType="java.lang.Long">
+        select count(id) from t_major where major_delete=0
+    </select>
+<!--    <select id="findByIdMajor" resultType="com.office.bean.Major">-->
+<!--        select * from t_major where id=#{id}-->
+<!--    </select>-->
+    <select id="findById" resultType="com.office.bean.Major">
+        select * from t_major where id=#{id}
+    </select>
+
+</mapper>

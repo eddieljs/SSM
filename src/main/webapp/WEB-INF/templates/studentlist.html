@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>滴答办公系统-学员列表</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="media/layui/css/layui.css" media="all">
+<script src="media/js/jquery.min.js"></script>
+</head>
+<body>
+<div class="layui-container">
+    <div class="layui-row" style="margin-top: 10px">
+        <div class="layui-col-xs3" style="margin-right: 20px">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">姓名：</label>
+                <div class="layui-input-block">
+                    <input type="text" id="no" class="layui-input" placeholder="学生姓名">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs3" style="margin-right: 20px">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">班级：</label>
+                <div class="layui-input-block">
+                    <select class="layui-input" id="fg">
+                        <option value="1">JAVA1805班</option>
+                        <option value="2">JAVA1806班</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs2">
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" onclick="searchData()"><i class="layui-icon layui-icon-search">搜索</i></button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs2">
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <a class="layui-btn layui-btn-mini layui-btn-mini" href="javascript:alert('导出中...');" lay-event="detail">导出Excel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+	
+	<div class="layui-container">
+		<table class="layui-table" id="tbdata" lay-filter="tbop">
+			<thead>
+				<tr>
+					<td>学号</td>
+					<td>姓名</td>
+					<td>班级</td>
+					<td>性别</td>
+					<td>手机号</td>
+					<td>邮箱</td>
+					<td>操作</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>01</td>
+					<td>老王</td>
+					<td>JAVAEE</td>
+					<td>女</td>
+					<td>1336789100</td>
+					<td>23423@qq.com</td>
+					<td><a class="layui-btn layui-btn-mini" href="studentupdate.html">编辑</a>
+						<a class="layui-btn layui-btn-mini layui-btn-mini" href="studentdetails.html" lay-event="detail">查看详情</a>
+						<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del" onclick="deleteCourse();">删除</a>
+					</td>
+				</tr>
+				<tr>
+					<td>01</td>
+					<td>老王</td>
+					<td>JAVAEE</td>
+					<td>女</td>
+					<td>1336789100</td>
+					<td>23423@qq.com</td>
+					<td><a class="layui-btn layui-btn-mini" href="studentupdate.html">编辑</a>
+						<a class="layui-btn layui-btn-mini layui-btn-mini" href="studentdetails.html" lay-event="detail">查看详情</a>
+						<a class="layui-btn layui-btn-danger layui-btn-mini"
+						lay-event="del" onclick="deleteCourse();">删除</a>
+					</td>
+				</tr>
+				<tr>
+					<td>01</td>
+					<td>老王</td>
+					<td>JAVAEE</td>
+					<td>女</td>
+					<td>1336789100</td>
+					<td>23423@qq.com</td>
+					<td><a class="layui-btn layui-btn-mini" href="studentupdate.html">编辑</a>
+						<a class="layui-btn layui-btn-mini layui-btn-mini" href="studentdetails.html" lay-event="detail">查看详情</a>
+						<a class="layui-btn layui-btn-danger layui-btn-mini"
+						lay-event="del" onclick="deleteCourse();">删除</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+						   <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">
+							    <i class="layui-icon">&lt;</i>
+						   </a> 
+							    <span style="color:#009688;font-weight: bold;">1</span> 
+							    <a href="#">2</a> 
+							    <a href="#">3</a>  
+							    <a href="#">4</a> 
+							    <a href="#">5</a> 
+							<a href="javascript:;" class="layui-laypage-next layui-disabled" data-page="2"> 
+							    <i class="layui-icon">&gt;</i>
+							</a> 
+							<span class="layui-laypage-skip">到第
+							   <input type="text" min="1" value="1" class="layui-input">页
+								<button type="button" class="layui-laypage-btn">确定</button>
+							</span> 
+							<span class="layui-laypage-count">共 1 条</span> 
+							<span class="layui-laypage-limits"> 
+							    <select lay-ignore="">
+							        <option value="10" selected="">10 条/页</option>
+									<option value="20">20 条/页</option>
+									<option value="30">30 条/页</option>
+									<option value="40">40 条/页</option>
+									<option value="50">50 条/页</option>
+									<option value="60">60 条/页</option>
+									<option value="70">70 条/页</option>
+									<option value="80">80 条/页</option>
+									<option value="90">90 条/页</option>
+							</select>
+							</span>
+						</div>
+	</div>
+	
+	<script src="media/layui/layui.js"></script>
+	
+	<script type="text/javascript">
+	   function deleteCourse(){
+		   layui.use('table', function() {
+			   layer.confirm('是否确认删除学生?',function(index) {
+				   layer.msg("删除成功", {icon : 6});
+				   layer.msg("删除失败", {icon : 5});
+			   });
+		   });
+	   }
+	</script>
+	
+	
+</body>
+</html>

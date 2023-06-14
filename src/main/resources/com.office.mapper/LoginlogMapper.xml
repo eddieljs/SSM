@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.office.mapper.LoginlogMapper">
+    <insert id="addLog">
+        insert into t_loginlog values (null,#{ip},#{no},now(),#{location})
+    </insert>
+    <select id="findMyLogs" resultType="com.office.bean.Loginlog">
+        select * from t_loginlog where no=#{no} order by id desc limit 0,5;
+    </select>
+</mapper>

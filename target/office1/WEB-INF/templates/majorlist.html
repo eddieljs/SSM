@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>滴答办公系统-部门列表</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href=" media/layui/css/layui.css" media="all">
+<script src="media/js/jquery.min.js"></script>
+	<script type="text/javascript">
+		<!--	修改页面大小-->
+		function changePageSize(pageSize){
+			location.href="major_list?pageIndex=1&pageSize="+pageSize;
+		}
+		<!--	跳转页面-->
+		function jumpPage(pageCount,pageSize){
+			var pageNum=$("#pageNum").val();
+			//alert(pageNum);
+			var regex=/^[1-9]\d*$/;
+			if (regex.test(pageNum)==true){
+				if (pageNum>=1&&pageNum<=pageCount){
+					location.href="major_list?pageIndex="+pageNum+"&pageSize="+pageSize;
+				}else{
+					alert("请输入一个合法的数字！");
+				}
+			}else{
+				alert("请输入一个数字！");
+			}
+		}
+	</script>
+</head>
+<body>
+	<div class="layui-container">
+		<table class="layui-table" id="tbdata" lay-filter="tbop">
+			<thead>
+				<tr>
+					<td>序号</td>
+					<td>学科名称</td>
+					<td>周数</td>
+					<td>成立日期</td>
+<!--					/<td>学科类型</td>-->
+					<td>操作</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:id="|tr_${m.id}|" th:each="m:${pageUtils.records}">
+					<td th:text="${m.id}">01</td>
+					<td th:text="${m.major_name}">教学部</td>
+					<td>0</td>
+					<td th:text="${m.major_time}">2015-10-01</td>
+					<td><a class="layui-btn layui-btn-mini" th:href="|major_toupdate/${m.id}|">编辑</a>
+						<a class="layui-btn layui-btn-danger layui-btn-mini"
+						   lay-event="del" th:onclick="|deleteMajor(${m.id});|">删除</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+			<a th:href="|major_list?pageIndex=${pageUtils.pageIndex-1}&pageSize=${pageUtils.pageSize}|"
+			   th:if="${pageUtils.pageIndex>1}"
+			   class="layui-laypage-prev"
+			   data-page="0">
+				<i class="layui-icon">&lt;</i>
+			</a>
+			<!--							    <span style="color:#009688;font-weight: bold;">1</span> -->
+			<a th:each="num:${pageUtils.numbers}"
+			   th:href="|major_list?pageIndex=${num}&pageSize=${pageUtils.pageSize}|"
+			   th:text="${num}"
+			   th:style="${pageUtils.pageIndex==num}?'color:red;font-weight:bold;':''"
+			></a>
+
+			<a th:href="|major_list?pageIndex=${pageUtils.pageIndex+1}&pageSize=${pageUtils.pageSize}|"
+			   th:if="${pageUtils.pageIndex<pageUtils.pageCount}"
+			   class="layui-laypage-prev"
+			   data-page="2">
+				<i class="layui-icon">&gt;</i>
+			</a>
+			<span class="layui-laypage-skip">到第
+							   <input type="text" min="1" id="pageNum" th:value="${pageUtils.pageIndex}" class="layui-input">页
+								<button type="button" class="layui-laypage-btn"
+										th:onclick="|jumpPage(${pageUtils.pageCount},${pageUtils.pageSize});|">
+									确定
+								</button>
+							</span>
+			<span class="layui-laypage-count">当前[[${pageUtils.pageIndex}]]/ 共[[${pageUtils.pageCount}]]页/[[${pageUtils.totalCount}]] 条</span>
+			<span class="layui-laypage-limits">
+							    <select lay-ignore="" onchange="changePageSize(this.value)">
+							        <option value="5" th:selected="${pageUtils.pageSize==5}">5 条/页</option>
+									<option value="10" th:selected="${pageUtils.pageSize==10}">10 条/页</option>
+									<option value="15" th:selected="${pageUtils.pageSize==15}">15 条/页</option>
+									<option value="20" th:selected="${pageUtils.pageSize==20}">20 条/页</option>
+									<option value="25" th:selected="${pageUtils.pageSize==25}">25 条/页</option>
+									<!--									<option value="20">20 条/页</option>-->
+									<!--									<option value="30">30 条/页</option>-->
+									<!--									<option value="40">40 条/页</option>-->
+									<!--									<option value="50">50 条/页</option>-->
+									<!--									<option value="60">60 条/页</option>-->
+									<!--									<option value="70">70 条/页</option>-->
+									<!--									<option value="80">80 条/页</option>-->
+									<!--									<option value="90">90 条/页</option>-->
+							</select>
+							</span>
+						</div>
+	</div>
+	<script src="media/layui/layui.js"></script>
+
+	<script type="text/javascript">
+		function deleteMajor(id){
+			layui.use('table', function() {
+				layer.confirm('是否确认删除学科?',function(index) {
+					$.getJSON("major_delete/"+id,function (result){
+						if (result){
+							layer.msg("删除成功",{icon : 6},function (result){
+								window.location.reload();
+							});
+							// $("#tr_"+id).fadeOut(2000,function (){
+								//刷新
+							// 	window.location.reload();
+							// });
+						}else{
+							layer.msg("删除失败",{icon : 5});
+						}
+					})
+				});
+			});
+		}
+	</script>
+	
+	
+</body>
+</html>

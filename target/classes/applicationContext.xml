@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--Spring整合MyBatis-->
+
+    <!--1.扫描包-->
+    <context:component-scan base-package="com.office.*"/>
+
+    <!--2.加载数据库配置文件-->
+    <context:property-placeholder location="classpath:jdbc.properties" file-encoding="UTF-8"/>
+
+    <!--3.配置数据源 如何连接数据库-->
+    <bean id="ds" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!--4.Spring框架帮MyBatis生成sqlSession MyBatis中的sqlSession交给了Spring管理-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--配置数据源-->
+        <property name="dataSource" ref="ds"/>
+        <!--指定MyBatis的Mapper文件位置-->
+        <property name="mapperLocations" value="classpath:com.office.mapper/*.xml"/>
+        <!--指定MyBatis实体类的别名-->
+        <property name="typeAliasesPackage" value="com.office.bean"/>
+    </bean>
+
+    <!--5.spring框架给Mapper层生成对象-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--Spring 框架会自动通过动态代理模式(反射) 生成对象-->
+        <property name="basePackage" value="com.office.mapper"/>
+    </bean>
+
+    <!--6.声明式事务-->
+    <!--6.1.配置项目的事务平台管理器-->
+    <bean id="tx" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--注入数据源-->
+        <property name="dataSource" ref="ds"/>
+    </bean>
+
+    <!--开启注解事务配置-->
+    <tx:annotation-driven transaction-manager="tx"/>
+
+</beans>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.office.mapper.DepartMapper">
+    <insert id="addDepart">
+        insert into t_depart values (null,#{name},#{createtime},0)
+    </insert>
+    <update id="deleteById">
+        update t_depart set del=1 where id=#{id}
+    </update>
+    <update id="updateDepart">
+        update t_depart set name=#{name},createtime=#{createtime} where id=#{id}
+    </update>
+    <!--    查总数-->
+    <select id="findTotalcount" resultType="java.lang.Long">
+        select count(id) from t_depart where del=0
+    </select>
+    <select id="findDepartByPage" resultType="com.office.bean.Depart">
+        select * from t_depart where del=0 limit #{pageStart},#{pageSize}
+    </select>
+    <select id="findById" resultType="com.office.bean.Depart">
+        select * from t_depart where id=#{id}
+    </select>
+    <select id="findEmpCountByDepartId" resultType="java.lang.Long">
+        select count(id) from t_emp where t_emp.did=#{did} and del=0
+    </select>
+    <select id="findDeparts" resultType="com.office.bean.Depart">
+        select * from t_depart where del=0
+    </select>
+</mapper>

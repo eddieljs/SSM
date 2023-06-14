@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--SpringMvc扫描控制层-->
+    <context:component-scan base-package="com.office.web"/>
+
+    <!--配置模板页面thymeleaf-->
+    <!--1.模板引擎解析器-->
+    <bean id="templateResolver" class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+        <!--模板页面路径的前缀-->
+        <property name="prefix" value="/WEB-INF/templates/" />
+        <!--模板页面路径的后缀-->
+        <property name="suffix" value=".html" />
+        <!--页面版本，有严格语法要求-->
+        <property name="templateMode" value="LEGACYHTML5" />
+        <!--静态模板没有缓存-->
+        <property name="cacheable" value="false" />
+        <!--编码格式-->
+        <property name="characterEncoding" value="UTF-8" />
+    </bean>
+
+    <!--2.配置模板引擎-->
+    <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+		<property name="templateResolver" ref="templateResolver" />
+    </bean>
+
+    <!--3.设置模板引擎中文乱码-->
+    <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="templateEngine" />
+        <!-- 中文乱码问题 -->
+        <property name="characterEncoding" value="UTF-8"/>
+    </bean>
+
+    <!--4.设置SpringMvc静态资源放行 方式1：-->
+    <!--<mvc:resources mapping="/media/**" location="/media/"/>-->
+
+    <!--4.设置SpringMvc静态资源放行 方式2：静态资源默认访问静态资源的处理器-->
+    <mvc:default-servlet-handler/>
+
+    <!--SpringMVC向容器中注入了组件-->
+    <mvc:annotation-driven/>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设置上传文件的最大尺寸为 5MB -->
+        <property name="maxUploadSize">
+            <value>5242880</value>
+        </property>
+    </bean>
+
+</beans>

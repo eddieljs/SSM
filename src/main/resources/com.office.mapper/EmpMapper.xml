@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.office.mapper.EmpMapper">
+    <insert id="addEmp">
+        insert into t_emp values (null,#{no},'8888',#{name},#{did},1,#{sex},#{email},#{qq},#{phone},now(),#{photo},0)
+    </insert>
+    <select id="login" resultType="com.office.bean.Emp">
+        select * from t_emp where no=#{no} and pass=#{pass} and del=0;
+    </select>
+    <select id="findTotalcount" resultType="java.lang.Long">
+        select count(id) from t_emp where del=0
+    </select>
+    <select id="findEmpsByPage" resultMap="empMap">
+        select t_emp.*,t_depart.name 'dname' from t_emp
+            inner join  t_depart
+            on t_emp.did=t_depart.id
+            where t_emp.del=0
+            order by t_emp.id desc
+            limit #{pageStart},#{pageSize}
+    </select>
+    <resultMap id="empMap" type="Emp">
+        <id column="id" property="id"/>
+        <result column="no" property="no"/>
+        <result column="pass" property="pass"/>
+        <result column="name" property="name"/>
+        <result column="did" property="did"/>
+        <result column="flag" property="flag"/>
+        <result column="sex" property="sex"/>
+        <result column="email" property="email"/>
+        <result column="qq" property="qq"/>
+        <result column="phone" property="phone"/>
+        <result column="createdate" property="createdate"/>
+        <result column="photo" property="phone"/>
+        <result column="del" property="del"/>
+        <association property="depart" javaType="Depart">
+            <result column="dname" property="name"/>
+        </association>
+    </resultMap>
+</mapper>

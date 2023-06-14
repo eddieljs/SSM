@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.office.mapper.ClassesMapper">
+    <select id="findTotalcount" resultType="long">
+        select count(id) from t_class where class_delete=0
+    </select>
+    <select id="findStudentCount" resultType="java.lang.Long">
+        select count(id) from t_student where t_student.class_id=#{classId} and t_student.del=0
+    </select>
+    <select id="findClassesByPage" resultMap="classesMap">
+        select t_class.*,t_major.major_name
+        from t_class inner join t_major on t_class.major_id=t_major.id
+        where t_class.class_delete=0 limit #{pageStart},#{pageSize}
+    </select>
+    <resultMap id="classesMap" type="Classes">
+        <id column="id" property="id"/>
+        <result column="major_id" property="major_id"/>
+        <result column="class_name" property="class_name"/>
+        <result column="class_date" property="class_date"/>
+        <result column="class_time" property="class_time"/>
+        <result column="class_address" property="class_address"/>
+        <result column="class_delete" property="class_delete"/>
+        <association property="major" javaType="Major">
+            <result column="major_name" property="major_name"/>
+        </association>
+    </resultMap>
+</mapper>
